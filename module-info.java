@@ -4,5 +4,6 @@
 /**
  * 
  */
-module polymorphism {
+module todolist {
+	requires java.desktop;
 }
