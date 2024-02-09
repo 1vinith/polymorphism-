@@ -1,0 +1,73 @@
+package todolist.com;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+@SuppressWarnings("serial")
+class DrawShape extends JPanel {
+	private static final long serialVersionUID = 1L;
+	private String shapeType;
+    private Color fillColor;
+
+    public DrawShape(String shapeType, Color fillColor) {
+        this.shapeType = shapeType;
+        this.fillColor = fillColor;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+
+        if (shapeType.equals("Rectangle")) {
+            g2d.setColor(fillColor);
+            g2d.fillRect(50, 50, 200, 100);
+        } else if (shapeType.equals("Circle")) {
+            g2d.setColor(fillColor);
+            g2d.fillOval(100, 100, 150, 150);
+        } else if (shapeType.equals("Triangle")) {
+            int[] xPoints = {100, 200, 150};
+            int[] yPoints = {200, 200, 100};
+            g2d.setColor(fillColor);
+            g2d.fillPolygon(xPoints, yPoints, 3);
+        } else if (shapeType.equals("Square")) {
+            g2d.setColor(fillColor);
+            g2d.fillRect(100, 100, 150, 150);
+        } else if (shapeType.equals("Oval")) {
+            g2d.setColor(fillColor);
+            g2d.fillOval(100, 100, 200, 150);
+        }
+    }
+}
+
+public class ShapeDrawer {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 400);
+
+            String[] shapes = {"Rectangle", "Circle", "Triangle", "Square", "Oval"};
+            String shapeType = (String) JOptionPane.showInputDialog(frame, "Choose a shape to draw:",
+                    "Shape Selection", JOptionPane.QUESTION_MESSAGE, null, shapes, shapes[0]);
+
+            if (shapeType != null) {
+                String colorName = JOptionPane.showInputDialog(frame, "Enter your favorite color:",
+                        "Color Selection", JOptionPane.QUESTION_MESSAGE);
+
+                Color fillColor;
+                try {
+                    fillColor = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
+                } catch (Exception e) {
+                    System.out.println("Invalid color name. Using default color (black).");
+                    fillColor = Color.black;
+                }
+
+                frame.add(new DrawShape(shapeType, fillColor));
+                frame.setVisible(true);
+            } else {
+                System.exit(0);
+            }
+        });
+    }
+}
