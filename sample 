@@ -1,5 +1,6 @@
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 class DrawShape extends JPanel {
     private String shapeType;
@@ -43,26 +44,27 @@ public class ShapeDrawer {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 400);
 
-            Scanner scanner = new Scanner(System.in);
+            String[] shapes = {"Rectangle", "Circle", "Triangle", "Square", "Oval"};
+            String shapeType = (String) JOptionPane.showInputDialog(frame, "Choose a shape to draw:",
+                    "Shape Selection", JOptionPane.QUESTION_MESSAGE, null, shapes, shapes[0]);
 
-            System.out.println("Choose a shape to draw (Rectangle, Circle, Triangle, Square, Oval):");
-            String shapeType = scanner.nextLine();
+            if (shapeType != null) {
+                String colorName = JOptionPane.showInputDialog(frame, "Enter your favorite color:",
+                        "Color Selection", JOptionPane.QUESTION_MESSAGE);
 
-            System.out.println("Enter your favorite color (e.g., red, blue, green):");
-            String colorName = scanner.nextLine();
+                Color fillColor;
+                try {
+                    fillColor = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
+                } catch (Exception e) {
+                    System.out.println("Invalid color name. Using default color (black).");
+                    fillColor = Color.black;
+                }
 
-            Color fillColor;
-            try {
-                fillColor = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
-            } catch (Exception e) {
-                System.out.println("Invalid color name. Using default color (black).");
-                fillColor = Color.black;
+                frame.add(new DrawShape(shapeType, fillColor));
+                frame.setVisible(true);
+            } else {
+                System.exit(0);
             }
-
-            frame.add(new DrawShape(shapeType, fillColor));
-            frame.setVisible(true);
-
-            scanner.close();
         });
     }
 }
